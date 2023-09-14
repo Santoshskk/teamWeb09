@@ -7,14 +7,12 @@
 
 
       <h2>Pick a category</h2>
-      <a href="https://www.example.com" target="_blank">
-        <p>-Category 1</p>
-        <p>-Category 2</p>
-        <p>-Category 3</p>
-        <p>-Category 4</p>
-        <p>-Category 5</p>
+      <p><a href="https://www.example.com">Category 1</a> </p>
+      <p><a href="https://www.example.com">Category 2</a> </p>
+      <p><a href="https://www.example.com">Category 3</a> </p>
+      <p><a href="https://www.example.com">Category 4</a> </p>
+      <p><a href="https://www.example.com">Category 5</a> </p>
 
-      </a>
     </div>
 
     <div class="center-column">
@@ -57,6 +55,7 @@ export default {
   margin: 10px;
   border: 2px solid #000;
   padding: 10px;
+  float: left;
 }
 
 .center-column {
