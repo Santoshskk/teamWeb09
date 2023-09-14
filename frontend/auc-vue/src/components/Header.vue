@@ -1,5 +1,5 @@
 <template>
-  <header class="header-bg">
+  <header class="header">
     <img class="imgHammer" src="@/assets/auctioneerHammer.jpeg" alt="auctioneerHammer" />
 
     <div class="header-content">
@@ -19,7 +19,7 @@ export default {
 </script>
 
 <style scoped>
-.header-bg {
+.header {
   background-color: #D2B48C;
   display: flex;
   align-items: center;

@@ -5,6 +5,7 @@
       <li class="nav-item">
         <a href="#">Home</a>
       </li>
+
       <li class="nav-item dropdown">
         <a href="#">My Offers</a>
         <div class="dropdown-content">
@@ -13,6 +14,7 @@
           <a href="#">Newest</a>
         </div>
       </li>
+
       <li class="nav-item dropdown">
         <a href="#">My Bids</a>
         <div class="dropdown-content">
@@ -28,7 +30,6 @@
         <li class="nav-item right">
           <a href="#">Log In</a>
         </li>
-
       </div>
     </ul>
   </nav>
@@ -99,7 +100,7 @@ export default {
   float: right;
 }
 
-.signUpLogIn {
+.nav-itemRight {
   display: flex;
   align-items: center;
   justify-content: flex-end;
