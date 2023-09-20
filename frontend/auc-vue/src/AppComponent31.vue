@@ -1,19 +1,23 @@
 <template>
   <headerComponent :title="title" :text="text" :imgSrc="imgSrc"/>
   <nav-bar/>
-  <welcomeComponent :welcomeText="welcomeText" :clockImgSrc="clockImgSrc"/>
+  <ExpiredAuction :welcomeText="welcomeText" :clockImgSrc="clockImgSrc"/>
+  <Category/>
+  <Info/>
 </template>
 
 <script>
-import welcomeComponent from "@/components/Welcome";
+import ExpiredAuction from "@/components/ExpiredAuction";
 import headerComponent from "@/components/Header";
 import NavBar from "@/components/Navbar";
+import Category from "@/components/Category";
+import Info from "@/components/Info";
 
 
 
 export default {
   name: "AppComponent31",
-  components: {NavBar, welcomeComponent, headerComponent},
+  components: {NavBar, ExpiredAuction, headerComponent, Category, Info},
   data(){
     return{
       title:"The Auctioneer",
