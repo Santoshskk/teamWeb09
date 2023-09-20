@@ -5,7 +5,7 @@
     <div class="header-content">
       <h1>{{ title }}</h1>
       <p class="subtitle">{{ text }}</p>
-      <p class="date"> Today is: {{ currentDate }}</p> <!-- Displaying the date here -->
+      <p class="date"> Today is: {{ currentDate }}</p>
     </div>
 
     <img class="imgClock" src="@/assets/images/woodenClock.jpeg" alt="woodenClock" />
@@ -19,7 +19,7 @@ export default {
   computed: {
     currentDate() {
       const today = new Date();
-      return today.toLocaleDateString(); // This will return the date in the format MM/DD/YYYY. You can customize the format if needed.
+      return today.toLocaleDateString();
     }
   }
 }
