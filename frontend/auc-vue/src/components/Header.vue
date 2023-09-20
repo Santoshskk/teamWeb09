@@ -1,6 +1,6 @@
 <template>
   <header class="header">
-    <img class="imgHammer" src="@/assets/auctioneerHammer.jpeg" alt="auctioneerHammer" />
+    <img class="imgHammer" src="@/assets/images/auctioneerHammer.jpeg" alt="auctioneerHammer" />
 
     <div class="header-content">
       <h1>{{ title }}</h1>
@@ -8,7 +8,7 @@
       <p class="date"> Today is: {{ currentDate }}</p> <!-- Displaying the date here -->
     </div>
 
-    <img class="imgClock" src="@/assets/woodenClock.jpeg" alt="woodenClock" />
+    <img class="imgClock" src="@/assets/images/woodenClock.jpeg" alt="woodenClock" />
   </header>
 </template>
 
