@@ -5,6 +5,7 @@
     <div class="header-content">
       <h1>{{ title }}</h1>
       <p class="subtitle">{{ text }}</p>
+      <p class="date"> Today is: {{ currentDate }}</p> <!-- Displaying the date here -->
     </div>
 
     <img class="imgClock" src="@/assets/woodenClock.jpeg" alt="woodenClock" />
@@ -14,7 +15,13 @@
 <script>
 export default {
   name: "HeaderComponent",
-  props: ['title', 'text', 'imgSrc', 'clockImgSrc']
+  props: ['title', 'text', 'imgSrc', 'clockImgSrc'],
+  computed: {
+    currentDate() {
+      const today = new Date();
+      return today.toLocaleDateString(); // This will return the date in the format MM/DD/YYYY. You can customize the format if needed.
+    }
+  }
 }
 </script>
 
@@ -45,12 +52,18 @@ export default {
 .header-content {
   flex-grow: 1;
   text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
-.subtitle {
-  text-align: right;
-}
 
+
+.date {
+  font-size: 14px;
+  color: #333;
+  margin-left: 20px;
+}
 
 @media screen and (max-width: 768px) {
   .imgClock, .imgHammer {
@@ -59,7 +72,8 @@ export default {
   }
 
   .header-content {
-    text-align: center;
+    flex-direction: row;
+    justify-content: space-between;
   }
 
   .subtitle {
@@ -69,6 +83,7 @@ export default {
 
   h1 {
     font-size: 24px;
+
   }
 }
 </style>

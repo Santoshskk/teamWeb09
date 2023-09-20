@@ -17,7 +17,7 @@ export default {
   data(){
     return{
       title:"The Auctioneer",
-      text:"Offed to you by Santosh and Tygo",
+      text:"Offered to you by Santosh and Tygo",
       welcomeText:'welcome',
       imgSrc:"./assets/auctioneerHammer.jpeg",
       clockImgSrc:"./assets/woodenClock.jpeg"
