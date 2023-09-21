@@ -69,6 +69,7 @@ export default {
     this.generateOffers(8);
   },
   methods: {
+
     generateOffers(count) {
       for (let i = 0; i < count; i++) {
         this.offers.push(Offer.createSampleOffer(this.nextOfferId));
