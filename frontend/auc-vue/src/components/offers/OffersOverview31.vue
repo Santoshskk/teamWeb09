@@ -66,7 +66,7 @@ export default {
     };
   },
   created() {
-    this.generateOffers(8); // Refactored the code to use a separate method
+    this.generateOffers(8);
   },
   methods: {
     generateOffers(count) {
