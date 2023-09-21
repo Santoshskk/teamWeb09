@@ -15,7 +15,7 @@
       <tbody>
       <tr v-for="offer in offers" :key="offer.id">
         <td>{{ offer.id }}</td>
-        <td>{{ offer.title }}</td>
+        <td> type{{ offer.title }}</td>
         <td>{{ offer.status }}</td>
         <td>{{ offer.description }}</td>
         <td>{{ offer.sellDate }}</td>
@@ -54,6 +54,7 @@ tr:hover {
   background-color: #ddd;
 }
 </style>
+
 <script>
 import { Offer } from '@/models/offer.js';
 
@@ -62,12 +63,13 @@ export default {
   data() {
     return {
       offers: [],
-      nextOfferId: 30000
+      nextOfferId: 30000,
     };
   },
   created() {
     this.generateOffers(8);
   },
+
   methods: {
 
     generateOffers(count) {
@@ -78,7 +80,8 @@ export default {
     },
     onNewOffer() {
       this.generateOffers(1); // Generate a single new offer
-    }
+    },
+
   }
 }
 </script>
