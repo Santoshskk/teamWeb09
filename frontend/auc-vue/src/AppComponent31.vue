@@ -7,7 +7,6 @@
 
 
   <offers-overview32></offers-overview32>
-  <offers-detail32></offers-detail32>
 </template>
 
 <script>
@@ -18,7 +17,6 @@ import NavBar from "@/components/Navbar";
 //import Info from "@/components/Info";
 //import offersOverview31 from "@/components/offers/OffersOverview31";
 import offersOverview32 from "@/components/offers/OffersOverview32";
-import offersDetail32 from "@/components/offers/OffersDetail32";
 
 export default {
 
@@ -26,7 +24,7 @@ export default {
   //Info
   //Category
   name: "AppComponent31",
-  components: {NavBar, headerComponent, offersOverview32, offersDetail32},
+  components: {NavBar, headerComponent, offersOverview32},
   data(){
     return{
       title:"The Auctioneer",

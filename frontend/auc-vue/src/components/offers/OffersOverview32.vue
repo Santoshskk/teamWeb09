@@ -18,6 +18,9 @@
       </tbody>
     </table>
     </div>
+    <div class="right-column2">
+      <offers-detail32/>
+    </div>
   </div>
 </template>
 
@@ -25,6 +28,14 @@
 
 .container {
   display: flex;
+  flex-direction: row;
+}
+
+.left-column{
+  flex: 1;
+}
+.right-column2{
+  flex: 2;
 }
 
 
@@ -63,9 +74,11 @@ tr:hover {
 </style>
 <script>
 import { Offer } from '@/models/offer.js';
+import offersDetail32 from "@/components/offers/OffersDetail32";
 
 export default {
   name: 'OffersOverview32',
+  components: {offersDetail32},
   data() {
     return {
       selectOffer: null,
