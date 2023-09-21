@@ -11,7 +11,8 @@
       </thead>
       <tbody>
       <tr v-for="offer in offers" :key="offer.id">
-        <td>{{ offer.title }}</td>
+        <td @click="getOffer(offer)" :class="{ 'selected': selectOffer === offer }" >{{ offer.title }}</td>
+
       </tr>
       <button @click="onNewOffer" style="margin-top: 20px; float: right;">New Offer</button>
       </tbody>
@@ -50,6 +51,15 @@ tr:nth-child(even) {
 tr:hover {
   background-color: #ddd;
 }
+
+.selected {
+  background-color: #D2B48C; /* Light gray background */
+  color: white;
+  border: 1px solid #d1d1d1; /* Gray border */
+}
+
+
+
 </style>
 <script>
 import { Offer } from '@/models/offer.js';
@@ -58,15 +68,21 @@ export default {
   name: 'OffersOverview32',
   data() {
     return {
+      selectOffer: null,
       offers: [],
       nextOfferId: 30000
     };
   },
+
+
   created() {
     this.generateOffers(8);
   },
   methods: {
 
+    getOffer(selectedOffer) {
+      this.selectOffer = selectedOffer;
+    },
     generateOffers(count) {
       for (let i = 0; i < count; i++) {
         this.offers.push(Offer.createSampleOffer(this.nextOfferId));
