@@ -104,6 +104,9 @@ export default {
     },
     onNewOffer() {
       this.generateOffers(1); // Generate a single new offer
+
+      //selected the newly added offer
+      this.selectOffer = this.offers[this.offers.length-1];
     }
   }
 }
