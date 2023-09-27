@@ -1,28 +1,32 @@
 <template>
-
-    <h1>Offers Overview</h1>
+  <h1>Offers Overview</h1>
   <div class="container">
     <div class="left-column">
-    <table>
-      <thead>
-      <tr>
-        <th>Title</th>
-      </tr>
-      </thead>
-      <tbody>
-      <tr v-for="offer in offers" :key="offer.id">
-        <td @click="getOffer(offer)" :class="{ 'selected': selectOffer === offer }" >{{ offer.title }}</td>
+      <table>
+        <thead>
+        <tr>
+          <th>Title</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr v-for="offer in offers" :key="offer.id">
+          <td @click="getOffer(offer)" :class="{ 'selected': selectOffer === offer }">{{ offer.title }}</td>
+        </tr>
+        <button @click="onNewOffer" style="margin-top: 20px; float: right;">New Offer</button>
+        <button @click="deleteoffer">Delete</button>
 
-      </tr>
-      <button @click="onNewOffer" style="margin-top: 20px; float: right;">New Offer</button>
-      </tbody>
-    </table>
+
+        </tbody>
+      </table>
     </div>
     <div class="right-column2">
-      <offers-detail32/>
+      <offers-detail32 v-if="selectOffer" :offer="selectOffer"/>
+
+      <p v-else>Please select an offer to view its details.</p>
     </div>
   </div>
 </template>
+
 
 <style scoped>
 
@@ -107,7 +111,20 @@ export default {
 
       //selected the newly added offer
       this.selectOffer = this.offers[this.offers.length-1];
+    },
+    removeOffer(offerId) {
+      this.offers = this.offers.filter(offer => offer.id !== offerId);
+      this.selectOffer = null;  // Unselect the offer
+
+    },
+    deleteoffer() {
+      if (this.selectOffer) {
+        this.removeOffer(this.selectOffer.id);
+      }
     }
-  }
+
+  },
+
+
 }
 </script>
