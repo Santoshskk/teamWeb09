@@ -14,8 +14,6 @@
         </tr>
         <button @click="onNewOffer" style="margin-top: 20px; float: right;">New Offer</button>
         <button @click="deleteoffer">Delete</button>
-
-
         </tbody>
       </table>
     </div>
