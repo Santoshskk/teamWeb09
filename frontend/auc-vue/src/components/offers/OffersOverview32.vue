@@ -70,10 +70,9 @@ tr:hover {
   color: white;
   border: 1px solid #d1d1d1; /* Gray border */
 }
-
-
-
 </style>
+
+
 <script>
 import { Offer } from '@/models/offer.js';
 import offersDetail32 from "@/components/offers/OffersDetail32";

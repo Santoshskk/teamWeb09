@@ -14,12 +14,6 @@ p{
     padding: 10px;
 }
 
-.welcome {
-    flex-direction: column;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
 
 h3 {
     display: flex;
