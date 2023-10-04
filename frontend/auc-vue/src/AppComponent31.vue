@@ -11,7 +11,6 @@ import NavBar from "@/components/Navbar";
 //import Category from "@/components/Category";
 //import Info from "@/components/Info";
 //import offersOverview31 from "@/components/offers/OffersOverview31";
-import offersOverview32 from "@/components/offers/OffersOverview32";
 
 export default {
 
