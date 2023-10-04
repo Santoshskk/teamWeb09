@@ -33,6 +33,37 @@ export class Offer {
         return clonedOffer;
     }
 
+    static equals(offer1, offer2) {
+        if (offer1 === null && offer2 === null) {
+            return true;
+        }
+
+        if (offer1 === null || offer2 === null) {
+            return false;
+        }
+
+        // Basic field comparisons
+        if (offer1.id !== offer2.id ||
+            offer1.title !== offer2.title ||
+            offer1.status !== offer2.status ||
+            offer1.description !== offer2.description ||
+            offer1.valueHighestBid !== offer2.valueHighestBid) {
+            return false;
+        }
+
+        // Deep comparison of Date objects
+        if (offer1.sellDate instanceof Date && offer2.sellDate instanceof Date) {
+            if (offer1.sellDate.getTime() !== offer2.sellDate.getTime()) {
+                return false;
+            }
+        } else if (offer1.sellDate !== offer2.sellDate) {
+            return false;
+        }
+
+        // All checks passed, objects are equal
+        return true;
+    }
+
     static createSampleOffer(pId = 0) {
         const allStatus = [
             this.status.NEW, this.status.FOR_SALE, this.status.SOLD, this.status.PAID,

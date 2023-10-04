@@ -24,11 +24,11 @@
       </tr>
     </table>
 
-    <button @click="save">Save</button>
-    <button @click="reset">Reset</button>
+    <button @click="save" :disabled="!hasChanged">Save</button>
+    <button @click="reset" :disabled="!hasChanged">Reset</button>
     <button @click="clear">Clear</button>
     <button @click="cancel">Cancel</button>
-    <button @click="deleteOffer">Delete</button>
+    <button @click="deleteOffer" :disabled="hasChanged">Delete</button>
   </div>
 </template>
 
@@ -68,6 +68,9 @@ export default {
       set(value) {
         this.clonedOffer.sellDate = value;
       }
+    },
+    hasChanged() {
+      return !Offer.equals(this.offer, this.clonedOffer);
     }
   },
   methods: {
