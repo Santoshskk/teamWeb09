@@ -20,7 +20,7 @@
       </tr>
       <tr>
         <td>Highest Bid:</td>
-        <td><input type="text" v-model="offer.highestBidValue" /></td>
+          <td><input type="text" v-model="offer.valueHighestBid" /></td>
       </tr>
     </table>
   </div>
