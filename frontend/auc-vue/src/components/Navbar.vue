@@ -12,6 +12,7 @@
           <router-link to="/offers">Show overview</router-link>
           <router-link to="/offers-detail">Offersdetail</router-link>
           <router-link to="/offers/overview33">OffersEdit</router-link>
+          <router-link to="/offers/overview34">OffersEdit [2.0] 34 </router-link>
         </div>
       </li>
 

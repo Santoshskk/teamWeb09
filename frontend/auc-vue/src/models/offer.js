@@ -27,6 +27,12 @@ export class Offer {
         WITHDRAWN: "WITHDRAWN"
     }
 
+    static copyConstructor(offer) {
+        let clonedOffer = Object.assign(new Offer(), offer);
+        clonedOffer.sellDate = new Date(offer.sellDate);
+        return clonedOffer;
+    }
+
     static createSampleOffer(pId = 0) {
         const allStatus = [
             this.status.NEW, this.status.FOR_SALE, this.status.SOLD, this.status.PAID,
@@ -38,11 +44,9 @@ export class Offer {
         randomDate.setDate(randomDate.getDate() + randomDays);
         let randomValue = Math.floor(Math.random() * 1000) ; // Random value between 0 and 999
 
-
         if(randomStatus === "NEW") {
             randomValue = 0;
         }
-
         return new Offer(pId, "testStatus" + pId,
             randomStatus, "description for offer" + pId, randomDate, randomValue);
     }
