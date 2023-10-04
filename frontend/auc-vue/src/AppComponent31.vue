@@ -1,22 +1,18 @@
 <template>
   <headerComponent :title="title" :text="text" :imgSrc="imgSrc"/>
   <nav-bar/>
-  <Category/>
-<!--  <offers-overview32></offers-overview32>-->
+  <router-view/>
 </template>
 
 <script>
 import headerComponent from "@/components/Header";
 import NavBar from "@/components/Navbar";
-import Category from "@/components/Category";
-
-// import offersOverview32 from "@/components/offers/OffersOverview32";
 
 export default {
 
 
   name: "AppComponent31",
-  components: {NavBar, headerComponent, Category},
+  components: {NavBar, headerComponent},
   data(){
     return{
       title:"The Auctioneer",
