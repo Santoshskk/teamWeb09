@@ -33,7 +33,8 @@
 </template>
 
 <script>
-import Offer from "@/models/offer.js";
+import {Offer} from "@/models/offer.js";
+import {router} from "@/router";
 
 export default {
   name: "OffersDetail34",
@@ -85,7 +86,6 @@ export default {
     },
     save() {
       this.$emit("updateOffer", this.clonedOffer);
-      this.$router.push("/offers"); // Navigate back to the offers overview
     },
     reset() {
       this.clonedOffer = Offer.copyConstructor(this.offer);
@@ -96,11 +96,10 @@ export default {
       }
     },
     cancel() {
-      this.$router.push("/offers"); // Navigate back to the offers overview
+      router.push("/offers");
     },
     deleteOffer() {
       this.$emit("deleteOffer", this.clonedOffer.id);
-      this.$router.push("/offers"); // Navigate back to the offers overview
     }
   }
 };

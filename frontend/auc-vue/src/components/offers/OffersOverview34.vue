@@ -19,7 +19,8 @@
       </table>
     </div>
     <div class="right-column2">
-      <offers-detail32 v-if="selectOffer" :offer="selectOffer"/>
+      <offers-detail34 v-if="selectOffer" :offer="selectOffer"   @updateOffer="updateOffer"
+                       @deleteOffer="deleteoffer"/>
       <p v-else>Please select an offer to view its details.</p>
     </div>
   </div>
@@ -73,12 +74,12 @@ tr:hover {
 
 <script>
 import { Offer } from '@/models/offer.js';
-import offersDetail32 from "@/components/offers/OffersDetail32";
+import offersDetail34 from "@/components/offers/OffersDetail34";
 import {router} from "@/router";
 
 export default {
-  name: 'OffersOverview32',
-  components: {offersDetail32},
+  name: 'OffersOverview34',
+  components: {offersDetail34},
   data() {
     return {
       selectOffer: null,
@@ -99,7 +100,7 @@ export default {
   },
 
   methods: {
-    // Existing methods ...
+
     findSelectedRouteParam(route) {
       if (route && route.params && route.params.id) {
         for (let i = 0; i < this.offers.length; i++) {
@@ -115,7 +116,7 @@ export default {
     getOffer(selectedOffer) {
       this.selectOffer = selectedOffer;
       router.push({
-        path: `/offers/overview33/${this.selectOffer.id}`
+        path: `/offers/overview34/${this.selectOffer.id}`
       });
     },
     generateOffers(count) {
@@ -132,7 +133,7 @@ export default {
 
       // Navigate to the new route
       router.replace({
-        path: `/offers/overview33/${this.selectOffer.id}`
+        path: `/offers/overview34/${this.selectOffer.id}`
       });
     },
     removeOffer(offerId) {
@@ -145,6 +146,7 @@ export default {
       }
     },
     updateOffer(updatedOffer) {
+      console.log("update")
       const index = this.offers.findIndex(o => o.id === updatedOffer.id);
       if (index !== -1) {
         this.offers.splice(index, 1, updatedOffer);
