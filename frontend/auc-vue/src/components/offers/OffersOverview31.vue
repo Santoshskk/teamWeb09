@@ -20,7 +20,7 @@
         <td>{{ offer.description }}</td>
         <td>{{ offer.sellDate }}</td>
         <td v-if="offer.status !== 'NEW'">{{ offer.valueHighestBid }}</td>
-        <td v-else></td>
+        <td v-else>{{ offer.valueHighestBid }}</td>
 
       </tr>
       <button @click="onNewOffer" style="margin-top: 20px; float: right;">New Offer</button>
