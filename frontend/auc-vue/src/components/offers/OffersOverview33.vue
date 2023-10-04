@@ -86,12 +86,14 @@ export default {
       offers: [],
       nextOfferId: 30000
     };
+
   },
 
 
   created() {
     this.generateOffers(8);
   },
+
   methods: {
 
     getOffer(selectedOffer) {
@@ -121,6 +123,7 @@ export default {
     }
 
   },
+
 
 
 }

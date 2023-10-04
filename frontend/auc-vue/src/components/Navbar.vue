@@ -3,15 +3,15 @@
   <nav class="navbar">
     <ul class="nav-menu">
       <li class="nav-item">
-        <a href="#">Home</a>
+        <router-link to="/welcome">Home</router-link>>
       </li>
 
       <li class="nav-item dropdown">
-        <a href="#">My Offers</a>
+        <a> My Offers</a>
         <div class="dropdown-content">
-          <a href="#">Highest</a>
-          <a href="#">Lowest</a>
-          <a href="#">Newest</a>
+          <router-link to="/offers">Show overview</router-link>
+          <router-link to="/offers-detail">Offersdetail</router-link>
+          <router-link to="/offers/overview33">OffersEdit</router-link>
         </div>
       </li>
 
@@ -25,10 +25,10 @@
 
       <div class="signUpLogIn">
         <li class="nav-item right">
-          <a href="#">Sign Up</a>
+          <router-link to="/signup">Sign Up</router-link>
         </li>
         <li class="nav-item right">
-          <a href="#">Log In</a>
+          <router-link to="/login">Log In</router-link>
         </li>
       </div>
     </ul>
