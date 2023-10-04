@@ -76,6 +76,7 @@ tr:hover {
 <script>
 import { Offer } from '@/models/offer.js';
 import offersDetail32 from "@/components/offers/OffersDetail32";
+import {router} from "@/router";
 
 export default {
   name: 'OffersOverview32',
@@ -94,11 +95,36 @@ export default {
     this.generateOffers(8);
   },
 
+  watch: {
+    '$route': {
+      immediate: true,  // to handle the component loading
+      handler: 'findSelectedRouteParam'  // method name to handle the route change
+    }
+  },
+
   methods: {
 
-    getOffer(selectedOffer) {
-      this.selectOffer = selectedOffer;
+    findSelectedRouteParam(route) {
+      if (route && route.params && route.params.id) {
+        for (let i = 0; i < this.offers.length; i++) {
+          console.log(this.offers[i]);
+          if (this.offers[i].id.toString() === route.params.id) {
+            this.getOffer(this.offers[i]);
+          }
+        }
+      } else {
+        console.error('Route params or ID not available');
+      }
     },
+
+    getOffer(selectedOffer) {
+      console.log("selectedId " + selectedOffer.id);
+      this.selectOffer = selectedOffer;
+      router.push({
+        path: `/offers/overview33/${this.selectOffer.id}`
+      });
+    },
+
     generateOffers(count) {
       for (let i = 0; i < count; i++) {
         this.offers.push(Offer.createSampleOffer(this.nextOfferId));
@@ -109,8 +135,15 @@ export default {
       this.generateOffers(1); // Generate a single new offer
 
       //selected the newly added offer
-      this.selectOffer = this.offers[this.offers.length-1];
+      this.selectOffer = this.offers[this.offers.length - 1];
+
+      // Navigate to the new route
+      router.replace({
+        path: `/offers/overview33/${this.selectOffer.id}`
+      });
     },
+
+
     removeOffer(offerId) {
       this.offers = this.offers.filter(offer => offer.id !== offerId);
       this.selectOffer = null;  // Unselect the offer
@@ -120,11 +153,8 @@ export default {
       if (this.selectOffer) {
         this.removeOffer(this.selectOffer.id);
       }
+
     }
-
-  },
-
-
-
+  }
 }
 </script>

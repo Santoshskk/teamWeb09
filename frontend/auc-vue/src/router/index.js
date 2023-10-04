@@ -15,7 +15,6 @@ export const router = createRouter({
         {path: '/signup'},
         {path: '/login'},
         {path: '/:catchAll(.*)', component: unknownRoute},
-        {path: '/offers/overview33', component: offersOverview33},
         {
             path: '/offers/overview33',
             component: offersOverview33,

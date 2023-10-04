@@ -43,7 +43,6 @@ export class Offer {
             randomValue = 0;
         }
 
-        console.log(randomValue)
         return new Offer(pId, "testStatus" + pId,
             randomStatus, "description for offer" + pId, randomDate, randomValue);
     }

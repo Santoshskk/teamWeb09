@@ -108,6 +108,7 @@ export default {
 
       //selected the newly added offer
       this.selectOffer = this.offers[this.offers.length-1];
+
     },
     removeOffer(offerId) {
       this.offers = this.offers.filter(offer => offer.id !== offerId);
