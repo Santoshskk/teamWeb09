@@ -1,5 +1,6 @@
-package com.example.aucserver;
+package app;
 
+import app.AucServerApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 
