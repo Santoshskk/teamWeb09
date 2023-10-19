@@ -1,7 +1,10 @@
 package app.rest;
 
 import app.models.Offer;
+import app.models.Views;
+import app.repositories.OffersRepository;
 import app.repositories.OffersRepositoryMock;
+import com.fasterxml.jackson.annotation.JsonView;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,13 +26,19 @@ public class OffersController {
         this.offersRepository = offersRepository;
     }
 
+    @JsonView(Views.Summary.class)
+    @GetMapping("/summary")
+    public List<Offer> getOfferSummary(){
+        return offersRepository.findAll();
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<Offer> getOfferById(@PathVariable long id) {
         Offer offer = offersRepository.findById(id);
         if (offer != null) {
             return ResponseEntity.ok(offer);
         } else {
-            return ResponseEntity.notFound().build();
+            throw new ResourceNotFoundException("Offer not found with ID: " + id);
         }
     }
 
@@ -61,12 +70,15 @@ public class OffersController {
 
     @PutMapping("/{id}")
     public ResponseEntity<Offer> updateOffer(@PathVariable long id, @RequestBody Offer offer) {
+        if (id != offer.getId()) {
+            throw new PreConditionFailedException("ID in the path does not match ID in the request body");
+        }
         if (offersRepository.findById(id) != null) {
             offer.setId((int) id);
             offer = offersRepository.save(offer);
             return ResponseEntity.ok(offer);
         } else {
-            return ResponseEntity.notFound().build();
+            throw new ResourceNotFoundException("Offer not found with ID: " + id);
         }
     }
 
@@ -76,7 +88,7 @@ public class OffersController {
         if (offer != null) {
             return ResponseEntity.ok(offer);
         } else {
-            return ResponseEntity.notFound().build();
+            throw new ResourceNotFoundException("Offer not found with ID: " + id);
         }
     }
 
@@ -85,3 +97,6 @@ public class OffersController {
         return offersRepository.findAll();
     }
 }
+
+
+
