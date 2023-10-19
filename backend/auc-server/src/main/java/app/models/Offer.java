@@ -1,14 +1,24 @@
 package app.models;
 
+import app.repositories.OffersRepository;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonView;
+
 import java.time.LocalDate;
 import java.util.Random;
 
 public class Offer {
+    @JsonView(OffersRepository.class)
     private int id;
+    @JsonView(OffersRepository.class)
     private String title;
+    @JsonView(OffersRepository.class)
     private Status status;
+    @JsonProperty
     private String description;
+    @JsonProperty
     private LocalDate sellDate;
+    @JsonProperty
     private double valueHighestBid;
 
     public Offer(int id, String title, Status status, String description, LocalDate sellDate, double valueHighestBid) {

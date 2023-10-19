@@ -1,12 +1,10 @@
 package app.rest;
 
 import app.models.Offer;
-import app.models.Views;
 import app.repositories.OffersRepository;
 import app.repositories.OffersRepositoryMock;
 import com.fasterxml.jackson.annotation.JsonView;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -26,8 +24,8 @@ public class OffersController {
         this.offersRepository = offersRepository;
     }
 
-    @JsonView(Views.Summary.class)
-    @GetMapping("/summary")
+    @RequestMapping("/summary")
+    @JsonView(OffersRepository.class)
     public List<Offer> getOfferSummary(){
         return offersRepository.findAll();
     }
@@ -48,16 +46,11 @@ public class OffersController {
             if (offer.getId() == 0) {
                 offer = offersRepository.save(offer);
             } else {
-//                if (offersRepository.findById(offer.getId()) == null) {
-//                    return ResponseEntity.badRequest().build();
-//                }
                 offer = offersRepository.save(offer);
             }
 
             URI location = ServletUriComponentsBuilder.fromCurrentRequest()
-                    .path("/{id}")
-                    .buildAndExpand(offer.getId())
-                    .toUri();
+                    .path("/{id}").buildAndExpand(offer.getId()).toUri();
 
             return ResponseEntity.created(location).body(offer);
         } else {
