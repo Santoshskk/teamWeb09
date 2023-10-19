@@ -46,6 +46,8 @@ public class OffersRepositoryMock implements OffersRepository {
                     return offer;
                 }
             }
+            offers.add(offer);
+            return offer;
         }
         return offer;
     }

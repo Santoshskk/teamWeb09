@@ -48,10 +48,9 @@ public class OffersController {
             if (offer.getId() == 0) {
                 offer = offersRepository.save(offer);
             } else {
-                // Controleert of het opgegeven ID al bestaat in de repository.
-                if (offersRepository.findById(offer.getId()) == null) {
-                    return ResponseEntity.badRequest().build();
-                }
+//                if (offersRepository.findById(offer.getId()) == null) {
+//                    return ResponseEntity.badRequest().build();
+//                }
                 offer = offersRepository.save(offer);
             }
 
