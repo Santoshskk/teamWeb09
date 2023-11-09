@@ -3,10 +3,11 @@ package app.models;
 import app.repositories.OffersRepository;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonView;
+import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
 import java.util.Random;
-
+@Component
 public class Offer {
     @JsonView(OffersRepository.class)
     private int id;

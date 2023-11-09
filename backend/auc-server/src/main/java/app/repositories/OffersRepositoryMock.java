@@ -2,15 +2,19 @@ package app.repositories;
 
 import app.models.Offer;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
+
 import java.util.ArrayList;
 import java.util.List;
 
-@Component
+@Repository
 public class OffersRepositoryMock implements OffersRepository {
 
     private final List<Offer> offers = new ArrayList<>();
 
+
     public OffersRepositoryMock() {
+        //loop to create 7 samples
         for (int i = 1; i <= 7; i++) {
             Offer sampleOffer = Offer.createSampleOffer(i);
             sampleOffer.setId(i); // Stel een unieke ID in voor elke aanbieding
@@ -18,6 +22,10 @@ public class OffersRepositoryMock implements OffersRepository {
         }
     }
 
+    /**
+     * this methode finds all offers
+     * @return all offers
+     */
     @Override
     public List<Offer> findAll() {
         return offers;
@@ -33,6 +41,13 @@ public class OffersRepositoryMock implements OffersRepository {
         return null;
     }
 
+    /**
+     * This methode saves of changes offer
+     * if the id is 0 it will genarate a new one
+     * or if the id does not exist it will add that one
+     * @param offer
+     * @return the saved offer
+     */
     @Override
     public Offer save(Offer offer) {
         if (offer.getId() == 0) {
@@ -62,6 +77,11 @@ public class OffersRepositoryMock implements OffersRepository {
         return nextId;
     }
 
+    /**
+     * this methode delets a given id
+     * @param id given id
+     * @return returns the deleted offer
+     */
     @Override
     public Offer deletedById(long id) {
         for (Offer offer : offers) {

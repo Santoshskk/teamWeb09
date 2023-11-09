@@ -7,6 +7,8 @@ import offersOverview33 from "@/components/offers/OffersOverview33";
 import OffersDetail32 from "@/components/offers/OffersDetail32";
 import offersDetail34 from "@/components/offers/OffersDetail34";
 import offersOverview34 from "@/components/offers/OffersOverview34";
+import offersOverview37 from "@/components/offers/OffersOverview37";
+import offersDetail37 from "@/components/offers/OffersDetail37";
 export const router = createRouter({
     history: createWebHashHistory() ,
     routes: [
@@ -35,6 +37,17 @@ export const router = createRouter({
                 {
                     path: ':id',
                     component: offersDetail34,
+                    props: true
+                }
+            ]
+        },
+        {
+            path: '/offers/overview37',
+            component: offersOverview37,
+            children: [
+                {
+                    path: ':id',
+                    component: offersDetail37,
                     props: true
                 }
             ]

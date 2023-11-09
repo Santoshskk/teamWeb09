@@ -28,8 +28,17 @@ export class Offer {
     }
 
     static copyConstructor(offer) {
-        let clonedOffer = Object.assign(new Offer(), offer);
-        clonedOffer.sellDate = new Date(offer.sellDate);
+        if (!offer) return null; // Handle the case where 'offer' is null or undefined
+
+        let clonedOffer = new Offer(
+            offer.id,
+            offer.title,
+            offer.status,
+            offer.description,
+            new Date(offer.sellDate),
+            offer.valueHighestBid
+        );
+
         return clonedOffer;
     }
 
