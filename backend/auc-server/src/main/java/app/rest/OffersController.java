@@ -57,6 +57,7 @@ public class OffersController {
     @PostMapping
     public ResponseEntity<Offer> createOffer(@RequestBody Offer offer) {
         if (offer != null) {
+            //this can be optemised because the outcome is the same in both cases
             if (offer.getId() == 0) {
                 offer = offersRepository.save(offer);
             } else {

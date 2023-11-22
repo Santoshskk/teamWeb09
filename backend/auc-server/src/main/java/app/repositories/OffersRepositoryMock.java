@@ -42,9 +42,10 @@ public class OffersRepositoryMock implements OffersRepository {
     }
 
     /**
-     * This methode saves of changes offer
+     * This method saves or changes offer
      * if the id is 0 it will genarate a new one
      * or if the id does not exist it will add that one
+     * if the id exists it will update that one
      * @param offer
      * @return the saved offer
      */

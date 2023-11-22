@@ -7,7 +7,7 @@ export class OffersAdaptor {
     }
 
     async fetchJson(url, options = null) {
-         const response =  await fetch(url, options);
+        let response =  await fetch(url, options);
         if (response.ok) {
             return await response.json();
         } else {

@@ -157,6 +157,7 @@ export default {
     },
     deleteoffer() {
       if (this.selectOffer) {
+        this.offersServices.asyncDeleteById(this.selectOffer.id);
         this.removeOffer(this.selectOffer.id);
       }
     },

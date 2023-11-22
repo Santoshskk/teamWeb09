@@ -52,6 +52,9 @@ export default {
   },
   created() {
     this.clonedOffer = Offer.copyConstructor(this.offer);
+    this.selectOffer = this.findSelectedRouteParam(this.$route);
+    console.log(this.selectOffer);
+
   },
   watch: {
     offer: {
@@ -75,6 +78,26 @@ export default {
     }
   },
   methods: {
+    async findSelectedRouteParam(route) {
+      if (route && route.params && route.params.id) {
+        const id = route.params.id;
+
+        // Call asyncFindById to fetch offer data based on the id
+        try {
+          const offer = await this.asyncFindById(id);
+          if (offer) {
+            this.getOffer(offer);
+          } else {
+            console.error(`Offer with ID ${id} not found`);
+          }
+        } catch (error) {
+          console.error('Error fetching offer:', error);
+        }
+      } else {
+        console.error('Route params or ID not available');
+      }
+    }
+    ,
     formatDate(date) {
       if (!date) return null;
       if (typeof date === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(date)) {
