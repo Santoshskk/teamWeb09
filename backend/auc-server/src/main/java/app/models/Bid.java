@@ -14,18 +14,24 @@ public class Bid {
     private Offer offer;
 
 
+    public Bid(double offerBid, Offer offer) {
+        this.offerBid = offerBid;
+        this.associateOffer(offer);
+    }
+
+    public Bid() {
+
+    }
 
     public boolean associateOffer(Offer offer) {
         //if the bid size is higher than 1 the recursion will be interfered
-        if(offer.getBids().size()>0){
-            return true;
-        }
+//        if(offer.getBids().size()>0){
+//            return true;
+//        }
         if (offer != null && this.getOffer() == null) {
-            if (!offer.associateBid(this)) {
-                offer.associateBid(this);
+                offer.addBid(this);
                 this.setOffer(offer);
                 return true;
-            }
         }
         return false;
     }

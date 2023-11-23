@@ -9,9 +9,7 @@ import jakarta.persistence.*;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
-import java.util.HashSet;
-import java.util.Random;
-import java.util.Set;
+import java.util.*;
 
 @Component
 @Entity
@@ -35,7 +33,7 @@ public class Offer {
 
     @OneToMany(mappedBy = "offer")
     @JsonBackReference
-    private Set<Bid> bids;
+    private List<Bid> bids= new ArrayList<>();
 
     public Offer(int id, String title, Status status, String description, LocalDate sellDate, double valueHighestBid) {
         this.id = id;
@@ -46,14 +44,14 @@ public class Offer {
         this.valueHighestBid = valueHighestBid;
     }
 
-    public Offer(int id, String title, Status status, String description, LocalDate sellDate, double valueHighestBid, Set<Bid> bid) {
+    public Offer(int id, String title, Status status, String description, LocalDate sellDate, double valueHighestBid, List<Bid> bid) {
         this.id = id;
         this.title = title;
         this.status = status;
         this.description = description;
         this.sellDate = sellDate;
         this.valueHighestBid = valueHighestBid;
-        this.bids=bid;
+        this.bids=new ArrayList<>();
     }
 
 
@@ -70,14 +68,14 @@ public class Offer {
     }
 
     public Offer(String title) {
-
         this.title = title;
         Status status = Status.values()[(int)(Math.random() * Status.values().length)];
         this.status = status;
+        this.bids= new ArrayList<>();
     }
 
     public Offer() {
-        // Lege standaardconstructor
+        this.bids= new ArrayList<>();
     }
 
     public static Offer createSampleOffer(int id) {
@@ -90,20 +88,21 @@ public class Offer {
         double formattedPrice = Double.parseDouble(priceString);
         return new Offer(id, title, status, description, startDate, formattedPrice);
     }
-    public boolean associateBid(Bid bid) {
+//    public boolean associateBid(Bid bid) {
+//        if(bid.getOffer() != null){
+//            return bid.associateOffer(this);
+//        }
+//        if(bid.getOfferBid()<= this.getValueHighestBid()){
+//            return false;
+//        }
+//        this.getBids().add(bid);
+//        bid.setOffer(this);
+//        return true;
+//    }
 
-        if (bid != null) {
-            if (this.bids == null) {
-                this.bids = new HashSet<>();
-            }
-            boolean getbids = this.getBids().add(bid);
-            if (!bid.associateOffer(this)) {
-                boolean associatedOffer = bid.associateOffer(this);
-                return getbids && associatedOffer;
-            }
-            return getbids;
-        }
-        return false;
+    public void addBid(Bid bid){
+        bids.add(bid);
+        bid.setOffer(this);
     }
 
     /**
@@ -171,11 +170,11 @@ public class Offer {
         this.valueHighestBid = valueHighestBid;
     }
 
-    public Set<Bid> getBids() {
+    public List<Bid> getBids() {
         return bids;
     }
 
-    public void setBids(Set<Bid> bids) {
+    public void setBids(List<Bid> bids) {
         this.bids = bids;
     }
 }
