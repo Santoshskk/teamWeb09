@@ -1,19 +1,30 @@
 package app.models;
 
 import app.repositories.OffersRepository;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonView;
+import jakarta.persistence.*;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
+import java.util.HashSet;
 import java.util.Random;
+import java.util.Set;
+
 @Component
+@Entity
+
 public class Offer {
     @JsonView(OffersRepository.class)
+    @Id
+    @GeneratedValue
     private int id;
     @JsonView(OffersRepository.class)
     private String title;
     @JsonView(OffersRepository.class)
+    @Enumerated(EnumType.STRING)
     private Status status;
     @JsonProperty
     private String description;
@@ -21,6 +32,10 @@ public class Offer {
     private LocalDate sellDate;
     @JsonProperty
     private double valueHighestBid;
+
+    @OneToMany(mappedBy = "offer")
+    @JsonBackReference
+    private Set<Bid> bids;
 
     public Offer(int id, String title, Status status, String description, LocalDate sellDate, double valueHighestBid) {
         this.id = id;
@@ -30,6 +45,18 @@ public class Offer {
         this.sellDate = sellDate;
         this.valueHighestBid = valueHighestBid;
     }
+
+    public Offer(int id, String title, Status status, String description, LocalDate sellDate, double valueHighestBid, Set<Bid> bid) {
+        this.id = id;
+        this.title = title;
+        this.status = status;
+        this.description = description;
+        this.sellDate = sellDate;
+        this.valueHighestBid = valueHighestBid;
+        this.bids=bid;
+    }
+
+
 
     public enum Status {
         NEW,
@@ -62,6 +89,38 @@ public class Offer {
         String priceString= String.format("%.1f", price).replace(',', '.');
         double formattedPrice = Double.parseDouble(priceString);
         return new Offer(id, title, status, description, startDate, formattedPrice);
+    }
+    public boolean associateBid(Bid bid) {
+
+        if (bid != null) {
+            if (this.bids == null) {
+                this.bids = new HashSet<>();
+            }
+            boolean getbids = this.getBids().add(bid);
+            if (!bid.associateOffer(this)) {
+                boolean associatedOffer = bid.associateOffer(this);
+                return getbids && associatedOffer;
+            }
+            return getbids;
+        }
+        return false;
+    }
+
+    /**
+     * Disassociate the given bid from the this offer, if associated
+     * @param bid
+     * @return whether an existing association has been removed
+     */
+    public boolean dissociateBid(Bid bid) {
+        if (bid != null && this.getBids().contains(bid)) {
+            // Remove the bid association from both sides
+            boolean removedFromOffer = this.getBids().remove(bid);
+            boolean removedFromBid = bid.associateOffer(null);
+
+            // Return true if the association was successfully removed from both sides
+            return removedFromOffer && removedFromBid;
+        }
+        return false;
     }
 
     public int getId() {
@@ -110,5 +169,13 @@ public class Offer {
 
     public void setValueHighestBid(double valueHighestBid) {
         this.valueHighestBid = valueHighestBid;
+    }
+
+    public Set<Bid> getBids() {
+        return bids;
+    }
+
+    public void setBids(Set<Bid> bids) {
+        this.bids = bids;
     }
 }

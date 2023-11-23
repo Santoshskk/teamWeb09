@@ -20,5 +20,5 @@ public interface OffersRepository {
 
     //deletes the offer fro the repository identified by offer.id;
     //returns the instance that has been deleted
-    Offer deletedById(long id);
+    Offer deleteById(long id);
 }

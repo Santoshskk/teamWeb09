@@ -2,6 +2,7 @@ package app.rest;
 
 import app.models.Offer;
 import app.repositories.OffersRepository;
+import app.repositories.OffersRepositoryJpa;
 import app.repositories.OffersRepositoryMock;
 import com.fasterxml.jackson.annotation.JsonView;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,10 +18,10 @@ import java.util.List;
 @RequestMapping("/offers")
 public class OffersController {
 
-    private final OffersRepositoryMock offersRepository;
+    private final OffersRepositoryJpa offersRepository;
 
     @Autowired
-    public OffersController(OffersRepositoryMock offersRepository) {
+    public OffersController(OffersRepositoryJpa offersRepository) {
         this.offersRepository = offersRepository;
     }
 
@@ -104,7 +105,7 @@ public class OffersController {
      */
     @DeleteMapping("/{id}")
     public ResponseEntity<Offer> deleteOffer(@PathVariable long id) {
-        Offer offer = offersRepository.deletedById(id);
+        Offer offer = offersRepository.deleteById(id);
         if (offer != null) {
             return ResponseEntity.ok(offer);
         } else {

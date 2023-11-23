@@ -84,7 +84,7 @@ public class OffersRepositoryMock implements OffersRepository {
      * @return returns the deleted offer
      */
     @Override
-    public Offer deletedById(long id) {
+    public Offer deleteById(long id) {
         for (Offer offer : offers) {
             if (offer.getId() == id) {
                 offers.remove(offer);
