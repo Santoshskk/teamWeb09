@@ -1,5 +1,6 @@
 package app.models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
@@ -11,6 +12,8 @@ public class Bid {
     private double offerBid;
 
     @ManyToOne
+
+    @JsonBackReference
     private Offer offer;
 
 
@@ -24,10 +27,6 @@ public class Bid {
     }
 
     public boolean associateOffer(Offer offer) {
-        //if the bid size is higher than 1 the recursion will be interfered
-//        if(offer.getBids().size()>0){
-//            return true;
-//        }
         if (offer != null && this.getOffer() == null) {
                 offer.addBid(this);
                 this.setOffer(offer);
@@ -36,12 +35,7 @@ public class Bid {
         return false;
     }
 
-    public static Bid generateBid(long id) {
-        Bid bid = new Bid();
-        bid.setOfferBid(Math.random() * 10000);
-        bid.setId(id);
-        return bid;
-    }
+
 
     public Offer getOffer() {
         return offer;

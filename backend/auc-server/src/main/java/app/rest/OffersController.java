@@ -1,9 +1,10 @@
 package app.rest;
 
+import app.models.Bid;
 import app.models.Offer;
+import app.repositories.BidsRepositoryJpa;
 import app.repositories.OffersRepository;
 import app.repositories.OffersRepositoryJpa;
-import app.repositories.OffersRepositoryMock;
 import com.fasterxml.jackson.annotation.JsonView;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -19,10 +20,13 @@ import java.util.List;
 public class OffersController {
 
     private final OffersRepositoryJpa offersRepository;
+    private final BidsRepositoryJpa bidsRepositoryJpa;
+
 
     @Autowired
-    public OffersController(OffersRepositoryJpa offersRepository) {
+    public OffersController(OffersRepositoryJpa offersRepository, BidsRepositoryJpa bidsRepositoryJpa) {
         this.offersRepository = offersRepository;
+        this.bidsRepositoryJpa = bidsRepositoryJpa;
     }
 
     /**
@@ -60,8 +64,6 @@ public class OffersController {
         if (offer != null) {
             //this can be optemised because the outcome is the same in both cases
             if (offer.getId() == 0) {
-                offer = offersRepository.save(offer);
-            } else {
                 offer = offersRepository.save(offer);
             }
 
@@ -121,7 +123,53 @@ public class OffersController {
     public List<Offer> getTestOffers() {
         return offersRepository.findAll();
     }
-}
+
+    /**
+     * Add a new Bid to the specified Offer.
+     * @param offerId The ID of the Offer to which the Bid will be added.
+     * @param bid The Bid object to be added.
+     * @return A ResponseEntity containing the updated Offer with the new Bid if the addition is successful.
+     * @throws ResourceNotFoundException if the Offer with the specified ID is not found.
+     * @throws PreConditionFailedException if the offer does not have status 'FOR_SALE' or if the bid value is not higher than the latest bid on the offer.
+     */
+    @PostMapping("/{offerId}/bids")
+    public ResponseEntity<Offer> addBidToOffer(@PathVariable long offerId, @RequestBody Bid bid) {
+        Offer offer = offersRepository.findById(offerId);
+
+        if (offer != null) {
+            // Check if the offer has status 'FOR_SALE'
+            if (offer.getStatus() != offer.getStatus().FOR_SALE) {
+                throw new PreConditionFailedException("Offer does not have status 'FOR_SALE'");
+
+            }
+
+            if (offer.getValueHighestBid() >= bid.getOfferBid()){
+                throw new PreConditionFailedException("Bid: "+ bid.getOfferBid()+ " is lower than the current highest bid "+
+                        offer.getValueHighestBid());
+            }
+
+            // Further check and modification of the Bid can be done here before saving it
+            // For example, you can set the Offer reference in the Bid
+            bid.setOffer(offer);
+
+            // Save the Bid to the repository
+            Bid savedBid = bidsRepositoryJpa.save(bid);
+
+            // Add the Bid to the Offer
+            offer.addBid(savedBid);
+
+            // Update the Offer in the repository
+            offer = offersRepository.save(offer);
+
+            return ResponseEntity.ok(offer);
+        } else {
+            throw new ResourceNotFoundException("Offer not found with ID: " + offerId);
+        }
+
+        }
+    }
+
+
 
 
 

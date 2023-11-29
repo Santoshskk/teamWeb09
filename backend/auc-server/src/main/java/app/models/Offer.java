@@ -30,10 +30,10 @@ public class Offer {
     private LocalDate sellDate;
     @JsonProperty
     private double valueHighestBid;
-
-    @OneToMany(mappedBy = "offer")
-    @JsonBackReference
-    private List<Bid> bids= new ArrayList<>();
+    @OneToMany(mappedBy = "offer", fetch = FetchType.EAGER)
+    @JsonManagedReference
+    @JsonProperty
+    private List<Bid> bids = new ArrayList<>();
 
     public Offer(int id, String title, Status status, String description, LocalDate sellDate, double valueHighestBid) {
         this.id = id;
@@ -88,17 +88,6 @@ public class Offer {
         double formattedPrice = Double.parseDouble(priceString);
         return new Offer(id, title, status, description, startDate, formattedPrice);
     }
-//    public boolean associateBid(Bid bid) {
-//        if(bid.getOffer() != null){
-//            return bid.associateOffer(this);
-//        }
-//        if(bid.getOfferBid()<= this.getValueHighestBid()){
-//            return false;
-//        }
-//        this.getBids().add(bid);
-//        bid.setOffer(this);
-//        return true;
-//    }
 
     public void addBid(Bid bid){
         bids.add(bid);

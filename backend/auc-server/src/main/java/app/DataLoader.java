@@ -26,7 +26,6 @@ public class DataLoader  implements CommandLineRunner {
         if (offers.size() > 0) return;
 
         System.out.println("Configuring some initial data");
-
         for (int i = 0; i < 9; i++) {
             Offer offer = Offer.createSampleOffer(i);
             offer = this.offersRepositoryJpa.save(offer);
@@ -34,7 +33,10 @@ public class DataLoader  implements CommandLineRunner {
 
             // Add a few bids to every offer
             for (int j = 0; j < 3; j++) {
-                Bid bid = new Bid(10,offer); // Assume a method to generate a Bid
+                double randomOfferBid = (Math.random() * 10000);
+                String formattedRandomOfferBid = String.format("%.2f", randomOfferBid);
+                formattedRandomOfferBid = formattedRandomOfferBid.replace(',', '.');
+                Bid bid = new Bid(Double.parseDouble(formattedRandomOfferBid),offer);
                 this.bidsRepositoryJpa.save(bid);
             }
         }
