@@ -18,7 +18,7 @@ public interface OffersRepository {
     //return the updated or inserted offer with new offer.id
     Offer save(Offer offer);
 
-    //deletes the offer fro the repository identified by offer.id;
+    //deletes the offer from the repository identified by offer.id;
     //returns the instance that has been deleted
     Offer deleteById(long id);
 }

@@ -14,6 +14,12 @@ import java.util.*;
 @Component
 @Entity
 
+@NamedQueries({
+        @NamedQuery(name = "Offer_find_by_status", query = "SELECT o FROM Offer o WHERE o.status = ?1"),
+        @NamedQuery(name = "Offer_find_by_title", query = "SELECT o FROM Offer o WHERE o.title LIKE ?1"),
+        // Corrected query
+        @NamedQuery(name = "Offer_find_by_status_and_minBidValue", query = "SELECT o FROM Offer o JOIN o.bids b WHERE o.status = ?1 AND b.offerBid >= ?2")
+})
 public class Offer {
     @JsonView(OffersRepository.class)
     @Id
@@ -65,6 +71,21 @@ public class Offer {
         CLOSED,
         EXPIRED,
         WITHDRAWN
+
+    }
+    /**
+     * Checks if the provided status string is valid.
+     *
+     * @param statusStr The status string to check.
+     * @return true if the status is valid, false otherwise.
+     */
+    public static boolean isValidStatus(String statusStr) {
+        for (Status status : Status.values()) {
+            if (status.name().equalsIgnoreCase(statusStr)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public Offer(String title) {

@@ -48,5 +48,14 @@ public class BidsRepositoryJpa implements EntityRepository<Bid> {
         }
         return bid;
     }
+
+    @Override
+    public List<Bid> findByQuery(String queryName, Object... params) {
+        var query = em.createNamedQuery(queryName, Bid.class);
+        for (int i = 0; i < params.length; i++) {
+            query.setParameter(i + 1, params[i]);
+        }
+        return query.getResultList();
+    }
 }
 

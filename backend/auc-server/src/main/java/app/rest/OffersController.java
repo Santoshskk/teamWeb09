@@ -14,6 +14,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/offers")
@@ -27,6 +28,33 @@ public class OffersController {
     public OffersController(OffersRepositoryJpa offersRepository, BidsRepositoryJpa bidsRepositoryJpa) {
         this.offersRepository = offersRepository;
         this.bidsRepositoryJpa = bidsRepositoryJpa;
+    }
+
+    /**
+     * Get offers based on optional query parameters: title, status, and/or minBidValue.
+     * If no parameters are provided, all offers are returned.
+     * @param title Optional title filter.
+     * @param status Optional status filter.
+     * @param minBidValue Optional minimum bid value filter.
+     * @return A list of filtered offers or all offers if no parameters are provided.
+     */
+    @GetMapping
+    public ResponseEntity<?> getOffers(
+            @RequestParam Optional<String> title,
+            @RequestParam Optional<String> status,
+            @RequestParam Optional<Double> minBidValue) {
+
+        // Validate status
+        if (status.isPresent() && !Offer.isValidStatus(status.get())) {
+            return ResponseEntity.badRequest().body("Invalid status value.");
+        }
+
+        // Logic to choose the appropriate named query based on parameters
+        // Example: if (title.isPresent() && !status.isPresent() && !minBidValue.isPresent()) { ... }
+        // Use offersRepository.findByQuery(queryName, params) to get the offers
+
+        // Default case: if no parameters are provided
+        return ResponseEntity.ok(offersRepository.findAll());
     }
 
     /**

@@ -48,4 +48,14 @@ public class OffersRepositoryJpa implements EntityRepository<Offer> {
         }
         return offer;
     }
+
+    @Override
+    public List<Offer> findByQuery(String queryName, Object... params) {
+        var query = em.createNamedQuery(queryName, Offer.class);
+        for (int i = 0; i < params.length; i++) {
+            query.setParameter(i + 1, params[i]);
+        }
+        return query.getResultList();
+    }
+
 }
