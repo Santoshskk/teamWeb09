@@ -11,8 +11,7 @@ public class Bid {
     private long id;
     private double offerBid;
 
-    @ManyToOne
-
+    @ManyToOne(cascade = CascadeType.PERSIST)
     @JsonBackReference
     private Offer offer;
 

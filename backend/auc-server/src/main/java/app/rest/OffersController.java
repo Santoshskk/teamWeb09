@@ -14,6 +14,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @RestController
@@ -46,16 +47,49 @@ public class OffersController {
 
         // Validate status
         if (status.isPresent() && !Offer.isValidStatus(status.get())) {
-            return ResponseEntity.badRequest().body("Invalid status value.");
+            return ResponseEntity.badRequest().body(null);
         }
 
-        // Logic to choose the appropriate named query based on parameters
-        // Example: if (title.isPresent() && !status.isPresent() && !minBidValue.isPresent()) { ... }
-        // Use offersRepository.findByQuery(queryName, params) to get the offers
+        String queryName = "";
 
-        // Default case: if no parameters are provided
-        return ResponseEntity.ok(offersRepository.findAll());
+        if (title.isPresent()) {
+            queryName = "Offer_find_by_title";
+        }
+        if (status.isPresent()) {
+            queryName = "Offer_find_by_status";
+        }
+        if (status.isPresent() && minBidValue.isPresent()) {
+            queryName = "Offer_find_by_status_and_minBidValue";
+        }
+
+        Object[] params;
+
+        if (title.isPresent() && status.isPresent() && minBidValue.isPresent()) {
+            params = new Object[]{title.get(), Offer.Status.valueOf(status.get().toUpperCase()), minBidValue.get()};
+
+        } else if (title.isPresent() && status.isPresent()) {
+            params = new Object[]{title.get(), Offer.Status.valueOf(status.get().toUpperCase())};
+
+        } else if (title.isPresent()) {
+            params = new Object[]{"%" + title.get() + "%"};
+
+        } else if (status.isPresent() && minBidValue.isPresent()) {
+            params = new Object[]{Offer.Status.valueOf(status.get().toUpperCase()), minBidValue.get()};
+
+        } else if (status.isPresent()) {
+            params = new Object[]{Offer.Status.valueOf(status.get().toUpperCase())};
+
+        } else if (minBidValue.isPresent()) {
+            return ResponseEntity.badRequest().body("Cannot handle your combination of request parameters.");
+        } else {
+            return ResponseEntity.ok(offersRepository.findAll());
+        }
+
+        List<Offer> filteredOffers = offersRepository.findByQuery(queryName, params);
+
+        return ResponseEntity.ok(filteredOffers);
     }
+
 
     /**
      * this api is to show a summary of all offers
@@ -193,8 +227,9 @@ public class OffersController {
         } else {
             throw new ResourceNotFoundException("Offer not found with ID: " + offerId);
         }
-
         }
+
+
     }
 
 

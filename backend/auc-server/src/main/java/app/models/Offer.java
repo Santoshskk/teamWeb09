@@ -17,7 +17,6 @@ import java.util.*;
 @NamedQueries({
         @NamedQuery(name = "Offer_find_by_status", query = "SELECT o FROM Offer o WHERE o.status = ?1"),
         @NamedQuery(name = "Offer_find_by_title", query = "SELECT o FROM Offer o WHERE o.title LIKE ?1"),
-        // Corrected query
         @NamedQuery(name = "Offer_find_by_status_and_minBidValue", query = "SELECT o FROM Offer o JOIN o.bids b WHERE o.status = ?1 AND b.offerBid >= ?2")
 })
 public class Offer {
@@ -36,7 +35,7 @@ public class Offer {
     private LocalDate sellDate;
     @JsonProperty
     private double valueHighestBid;
-    @OneToMany(mappedBy = "offer", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "offer", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
     @JsonManagedReference
     @JsonProperty
     private List<Bid> bids = new ArrayList<>();
@@ -115,22 +114,22 @@ public class Offer {
         bid.setOffer(this);
     }
 
-    /**
-     * Disassociate the given bid from the this offer, if associated
-     * @param bid
-     * @return whether an existing association has been removed
-     */
-    public boolean dissociateBid(Bid bid) {
-        if (bid != null && this.getBids().contains(bid)) {
-            // Remove the bid association from both sides
-            boolean removedFromOffer = this.getBids().remove(bid);
-            boolean removedFromBid = bid.associateOffer(null);
-
-            // Return true if the association was successfully removed from both sides
-            return removedFromOffer && removedFromBid;
-        }
-        return false;
-    }
+//    /**
+//     * Disassociate the given bid from the this offer, if associated
+//     * @param bid
+//     * @return whether an existing association has been removed
+//     */
+//    public boolean dissociateBid(Bid bid) {
+//        if (bid != null && this.getBids().contains(bid)) {
+//            // Remove the bid association from both sides
+//            boolean removedFromOffer = this.getBids().remove(bid);
+//            boolean removedFromBid = bid.associateOffer(null);
+//
+//            // Return true if the association was successfully removed from both sides
+//            return removedFromOffer && removedFromBid;
+//        }
+//        return false;
+//    }
 
     public int getId() {
         return id;

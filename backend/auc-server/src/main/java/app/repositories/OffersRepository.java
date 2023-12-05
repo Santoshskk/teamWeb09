@@ -21,4 +21,5 @@ public interface OffersRepository {
     //deletes the offer from the repository identified by offer.id;
     //returns the instance that has been deleted
     Offer deleteById(long id);
+    List<Offer> findByQuery(String queryName, Object... params);
 }
