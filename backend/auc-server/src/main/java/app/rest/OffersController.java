@@ -47,7 +47,7 @@ public class OffersController {
 
         // Validate status
         if (status.isPresent() && !Offer.isValidStatus(status.get())) {
-            return ResponseEntity.badRequest().body(null);
+            return ResponseEntity.badRequest().body("status = "+status.get()+" is not a valid status");
         }
 
         String queryName = "";
