@@ -1,5 +1,6 @@
 package app.rest;
 
+import app.APIConfig;
 import app.authorization.JWToken;
 import app.models.User;
 import com.fasterxml.jackson.databind.node.ObjectNode;
@@ -17,10 +18,12 @@ import org.springframework.web.server.NotAcceptableStatusException;
 public class AuthenticationController {
 
     private final JWToken jwtTokenGenerator;
+    private APIConfig apiConfig;
 
     @Autowired
-    public AuthenticationController(JWToken jwtTokenGenerator) {
+    public AuthenticationController(JWToken jwtTokenGenerator, APIConfig apiConfig) {
         this.jwtTokenGenerator = jwtTokenGenerator;
+        this.apiConfig = apiConfig;
     }
 
     @PostMapping("/login")
@@ -34,9 +37,9 @@ public class AuthenticationController {
             throw new NotAcceptableStatusException("Login failed for email: " + email);
         }
 
-        String issuer = "HvA";
-        String passphrase = "your_secret_passphrase";
-        int expiration = 1200;
+        String issuer = apiConfig.getIssuer();
+        String passphrase = apiConfig.getPassphrase();
+        int expiration = apiConfig.getExpiration();
 
 
         // Generate JWT token
