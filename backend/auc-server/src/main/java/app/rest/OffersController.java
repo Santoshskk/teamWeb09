@@ -14,20 +14,19 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 
 @RestController
 @RequestMapping("/offers")
 public class OffersController {
 
-    private final OffersRepositoryJpa offersRepository;
+    private final OffersRepositoryJpa offersRepositoryJpa;
     private final BidsRepositoryJpa bidsRepositoryJpa;
 
 
     @Autowired
     public OffersController(OffersRepositoryJpa offersRepository, BidsRepositoryJpa bidsRepositoryJpa) {
-        this.offersRepository = offersRepository;
+        this.offersRepositoryJpa = offersRepository;
         this.bidsRepositoryJpa = bidsRepositoryJpa;
     }
 
@@ -82,10 +81,10 @@ public class OffersController {
         } else if (minBidValue.isPresent()) {
             return ResponseEntity.badRequest().body("Cannot handle your combination of request parameters.");
         } else {
-            return ResponseEntity.ok(offersRepository.findAll());
+            return ResponseEntity.ok(offersRepositoryJpa.findAll());
         }
 
-        List<Offer> filteredOffers = offersRepository.findByQuery(queryName, params);
+        List<Offer> filteredOffers = offersRepositoryJpa.findByQuery(queryName, params);
 
         return ResponseEntity.ok(filteredOffers);
     }
@@ -98,7 +97,7 @@ public class OffersController {
     @RequestMapping("/summary")
     @JsonView(OffersRepository.class)
     public List<Offer> getOfferSummary(){
-        return offersRepository.findAll();
+        return offersRepositoryJpa.findAll();
     }
 
     /**
@@ -108,7 +107,7 @@ public class OffersController {
      */
     @GetMapping("/{id}")
     public ResponseEntity<Offer> getOfferById(@PathVariable long id) {
-        Offer offer = offersRepository.findById(id);
+        Offer offer = offersRepositoryJpa.findById(id);
         if (offer != null) {
             return ResponseEntity.ok(offer);
         } else {
@@ -126,7 +125,7 @@ public class OffersController {
         if (offer != null) {
             //this can be optemised because the outcome is the same in both cases
             if (offer.getId() == 0) {
-                offer = offersRepository.save(offer);
+                offer = offersRepositoryJpa.save(offer);
             }
 
             URI location = ServletUriComponentsBuilder.fromCurrentRequest()
@@ -152,9 +151,9 @@ public class OffersController {
         if (id != offer.getId()) {
             throw new PreConditionFailedException("ID in the path does not match ID in the request body");
         }
-        if (offersRepository.findById(id) != null) {
+        if (offersRepositoryJpa.findById(id) != null) {
             offer.setId((int) id);
-            offer = offersRepository.save(offer);
+            offer = offersRepositoryJpa.save(offer);
             return ResponseEntity.ok(offer);
         } else {
             throw new ResourceNotFoundException("Offer not found with ID: " + id);
@@ -169,7 +168,7 @@ public class OffersController {
      */
     @DeleteMapping("/{id}")
     public ResponseEntity<Offer> deleteOffer(@PathVariable long id) {
-        Offer offer = offersRepository.deleteById(id);
+        Offer offer = offersRepositoryJpa.deleteById(id);
         if (offer != null) {
             return ResponseEntity.ok(offer);
         } else {
@@ -183,7 +182,7 @@ public class OffersController {
      */
     @GetMapping("/all")
     public List<Offer> getTestOffers() {
-        return offersRepository.findAll();
+        return offersRepositoryJpa.findAll();
     }
 
     /**
@@ -196,7 +195,7 @@ public class OffersController {
      */
     @PostMapping("/{offerId}/bids")
     public ResponseEntity<Offer> addBidToOffer(@PathVariable long offerId, @RequestBody Bid bid) {
-        Offer offer = offersRepository.findById(offerId);
+        Offer offer = offersRepositoryJpa.findById(offerId);
 
         if (offer != null) {
             // Check if the offer has status 'FOR_SALE'
@@ -221,7 +220,7 @@ public class OffersController {
             offer.addBid(savedBid);
 
             // Update the Offer in the repository
-            offer = offersRepository.save(offer);
+            offer = offersRepositoryJpa.save(offer);
 
             return ResponseEntity.ok(offer);
         } else {
