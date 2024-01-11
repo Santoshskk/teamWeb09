@@ -1,12 +1,10 @@
 package app.authorization;
 
+import app.APIConfig;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.jsonwebtoken.*;
 
-import io.jsonwebtoken.security.Keys;
-import jakarta.transaction.Transactional;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.stereotype.Component;
 
 import java.nio.charset.StandardCharsets;
@@ -17,8 +15,13 @@ import javax.crypto.spec.SecretKeySpec;
 @Component
 public class JWToken {
     private static final String JWT_CALLNAME_CLAIM = "sub";
-    private static final String JWT_ACCOUNTID_CLAIM = "id";
+    private static final String JWT_USERID_CLAIM = "id";
     private static final String JWT_ROLE_CLAIM = "role";
+    public static final String JWT_ATTRIBUTE_NAME = "JWTokenInfo";
+    private static final String JWT_IPADDRESS_CLAIM = "ipa";
+
+
+
 
     @JsonProperty
     private String callName;
@@ -26,6 +29,8 @@ public class JWToken {
     private long accountId;
     @JsonProperty
     private String role;
+
+    private String ipAddress;
 
     public JWToken(String callName, Long accountId, String role) {
         this.callName = callName;
@@ -42,7 +47,7 @@ public class JWToken {
 
         return Jwts.builder()
                 .claim(JWT_CALLNAME_CLAIM, this.callName)
-                .claim(JWT_ACCOUNTID_CLAIM, this.accountId)
+                .claim(JWT_USERID_CLAIM, this.accountId)
                 .claim(JWT_ROLE_CLAIM, this.role)
                 .setIssuer(issuer)
                 .setIssuedAt(new Date())
@@ -51,9 +56,72 @@ public class JWToken {
                 .compact();
     }
 
+    public static JWToken decode(String token, String passphrase)
+            throws ExpiredJwtException, MalformedJwtException {
+        // Validate the token string and extract the claims
+        Key key = getKey(passphrase);
+        Jws<Claims> jws = Jwts.parserBuilder().setSigningKey(key).build()
+                .parseClaimsJws(token);
+        Claims claims = jws.getBody();
+
+
+        // build our token from the extracted claims
+        JWToken jwToken = new JWToken(
+                claims.get(JWT_CALLNAME_CLAIM).toString(),
+                Long.valueOf(claims.get(JWT_USERID_CLAIM).toString()),
+                claims.get(JWT_ROLE_CLAIM).toString()
+        );
+        jwToken.setIpAddress((String) claims.get(JWT_IPADDRESS_CLAIM));
+        return jwToken;
+    }
+
     private static Key getKey(String passphrase) {
-//        byte[] hmacKey = passphrase.getBytes(StandardCharsets.UTF_8);
-//        return new SecretKeySpec(hmacKey, SignatureAlgorithm.HS512.getJcaName());
-        return Keys.secretKeyFor(SignatureAlgorithm.HS512);
+        byte[] hmacKey = passphrase.getBytes(StandardCharsets.UTF_8);
+        return new SecretKeySpec(hmacKey, SignatureAlgorithm.HS512.getJcaName());
+    }
+
+    public static String getIpAddress(HttpServletRequest request) {
+        // obtain the source IP-address of the current request
+        String ipAddress = null;
+        if (APIConfig.IP_FORWARDED_FOR != null) {
+            ipAddress = request.getHeader(APIConfig.IP_FORWARDED_FOR);
+        }
+        if (ipAddress == null) {
+            ipAddress = request.getRemoteAddr();
+        }
+
+        return ipAddress;
+    }
+
+    public String getCallName() {
+        return callName;
+    }
+
+    public void setCallName(String callName) {
+        this.callName = callName;
+    }
+
+    public long getAccountId() {
+        return accountId;
+    }
+
+    public void setAccountId(long accountId) {
+        this.accountId = accountId;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
+    }
+
+    public String getIpAddress() {
+        return ipAddress;
+    }
+
+    public void setIpAddress(String ipAddress) {
+        this.ipAddress = ipAddress;
     }
 }

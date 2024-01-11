@@ -1,18 +1,20 @@
 package app.models;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import org.springframework.stereotype.Component;
 
 import java.util.Objects;
 @Component
-@Table(name = "\"user\"")
+@NamedQueries({
+        @NamedQuery(name="Users_find_by_email",
+                query = "select a from User a where a.email = ?1")
+})
 @Entity
 public class User {
 
     @Id
+    @GeneratedValue
     private long id;
 
     @JsonProperty
