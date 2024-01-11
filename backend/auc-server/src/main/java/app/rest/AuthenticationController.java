@@ -24,6 +24,7 @@ public class AuthenticationController {
     @Autowired
     APIConfig apiConfig;
 
+
     @Autowired
     private EntityRepository<User> userEntityRepository;
     @PostMapping(path = "/login")
@@ -31,32 +32,39 @@ public class AuthenticationController {
             @RequestBody ObjectNode signInInfo,
             HttpServletRequest request) {
 
-        String email = signInInfo.get("email").asText();
-        String password = signInInfo.get("password").asText();
+        String email = signInInfo.has("email") ? signInInfo.get("email").asText() : null;
+        String password = signInInfo.has("password") ? signInInfo.get("password").asText() : null;
 
-        // check whether we need and have the source IP-address of the user
-        String ipAddress = JWToken.getIpAddress(request);
-        if (ipAddress == null) {
-            throw new NotAcceptableStatusException("Cannot identify your source IP-Address.");
+        // Check if email or password is null
+        if (email == null || password == null) {
+            throw new IllegalArgumentException("Email or password is missing in the request body");
         }
 
-        List<User> users = userEntityRepository.findByQuery("Users_find_by_email", email);
-        User user = users.size() > 0 ? users.get(0) : null;
-        System.out.println(users);
+        User user = new User(email,password, "Registerd user");
 
-        if (user == null || !user.verifyPassword(password)) {
-            throw new NotAcceptableStatusException("Cannot authenticate user with email=" + email);
+        if (user == null) {
+            throw new NotAcceptableStatusException("User with email " + email + " not found");
         }
 
-        // Issue a token for the user, valid for some time
-        JWToken jwToken = new JWToken(user.getName(), user.getId(), user.getRole());
-        String tokenString = jwToken.encode(this.apiConfig.getIssuer(),
-                this.apiConfig.getPassphrase(),
-                this.apiConfig.getExpiration());
+        String[] usernameSplit = email.split("@");
 
-        return ResponseEntity.accepted()
-                .header(HttpHeaders.AUTHORIZATION, "Bearer " + tokenString)
-                .body(user);
+        if (usernameSplit[0].equals(password)) {
+            // Issue a token for the user, valid for some time
+            JWToken jwToken = new JWToken(user.getName(), user.getId(), user.getRole());
+            String tokenString = jwToken.encode(this.apiConfig.getIssuer(),
+                    this.apiConfig.getPassphrase(),
+                    this.apiConfig.getExpiration());
+            System.out.println(tokenString);
+
+            return ResponseEntity.accepted()
+                    .header(HttpHeaders.AUTHORIZATION, "Bearer " + tokenString)
+                    .body(user);
+        } else
+            throw new NotAcceptableStatusException("Incorrect password for user with email " + email + password);
+
+
+
+
     }
 }
 

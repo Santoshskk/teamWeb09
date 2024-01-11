@@ -80,18 +80,6 @@ public class JWToken {
         return new SecretKeySpec(hmacKey, SignatureAlgorithm.HS512.getJcaName());
     }
 
-    public static String getIpAddress(HttpServletRequest request) {
-        // obtain the source IP-address of the current request
-        String ipAddress = null;
-        if (APIConfig.IP_FORWARDED_FOR != null) {
-            ipAddress = request.getHeader(APIConfig.IP_FORWARDED_FOR);
-        }
-        if (ipAddress == null) {
-            ipAddress = request.getRemoteAddr();
-        }
-
-        return ipAddress;
-    }
 
     public String getCallName() {
         return callName;

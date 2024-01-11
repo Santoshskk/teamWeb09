@@ -5,16 +5,15 @@ import jakarta.persistence.*;
 import org.springframework.stereotype.Component;
 
 import java.util.Objects;
-@Component
-@NamedQueries({
-        @NamedQuery(name="Users_find_by_email",
-                query = "select a from User a where a.email = ?1")
-})
-@Entity
+//@NamedQueries({
+//        @NamedQuery(name="Find_by_email",
+//                query = "select a from User a where a.email = ?1")
+//})
+//@Entity
+//@Table(name = "users")
 public class User {
 
     @Id
-    @GeneratedValue
     private long id;
 
     @JsonProperty
@@ -28,7 +27,7 @@ public class User {
 
     public User( String email, String hashedPassword, String role) {
         this.id = randomId();
-        this.name = extractName(email);
+        this.name= extractName(email);
         this.email = email;
         this.hashedPassword = hashedPassword;
         this.role = role;
@@ -45,7 +44,7 @@ public class User {
 
     private String extractName(String userEmail) {
         if (userEmail == null) {
-            return null; // or handle as needed based on your requirements
+            return null;
         }
         String[] usernameSplit = userEmail.split("@");
         return usernameSplit[0];
@@ -53,6 +52,7 @@ public class User {
 
     public boolean verifyPassword(String enterdPassword){
         if(Objects.equals(this.name, enterdPassword)){
+            System.out.println(this.name + " goed");
             return true;
         }
         return false;

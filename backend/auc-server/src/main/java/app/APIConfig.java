@@ -12,7 +12,6 @@ import java.util.Set;
 @Configuration
 @ConfigurationProperties(prefix = "jwt")
 public class APIConfig implements WebMvcConfigurer {
-    public static final String IP_FORWARDED_FOR = "X-Forwarded-For";
 
     @Value("${jwt.issuer}")
     private String issuer;

@@ -51,21 +51,8 @@ public class JWTRequestFilter extends OncePerRequestFilter {
             response.sendError(HttpServletResponse.SC_UNAUTHORIZED, e.getMessage() + " You need to logon first.");
             return;
         }
-
-        // obtain the source ip address of the request
-        String sourceIpAddress = JWToken.getIpAddress(request);
-
-        // block the request if the source ip cannot be identified
-        if (sourceIpAddress == null
-                || !sourceIpAddress.equals(jwToken.getIpAddress())
-        ) {
-            response.sendError(HttpServletResponse.SC_UNAUTHORIZED,
-                    "Cannot identify or validate your source IP-Address.");
-            return;
-        }
-
+        // pass-on the token info as an attribute for the request
         request.setAttribute(JWToken.JWT_ATTRIBUTE_NAME, jwToken);
-
         filterChain.doFilter(request, response);
 
     }
