@@ -9,6 +9,7 @@ import offersDetail34 from "@/components/offers/OffersDetail34";
 import offersOverview34 from "@/components/offers/OffersOverview34";
 import offersOverview37 from "@/components/offers/OffersOverview37";
 import offersDetail37 from "@/components/offers/OffersDetail37";
+import signInComponent from "@/components/SignInComponent";
 export const router = createRouter({
     history: createWebHashHistory() ,
     routes: [
@@ -16,8 +17,9 @@ export const router = createRouter({
         {path: '/offers', component: offersOverview31},
         {path: '/welcome', component: category},
         {path: '/', redirect: "/welcome"},
+        {path: '/sign-out', redirect: "/login"},
         {path: '/signup', component: unknownRoute},
-        {path: '/login',redirect: "/signup"},
+        {path: '/login',component: signInComponent},
         {path: '/:catchAll(.*)', component: unknownRoute},
         {
             path: '/offers/overview33',

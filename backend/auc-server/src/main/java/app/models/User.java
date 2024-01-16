@@ -9,8 +9,8 @@ import java.util.Objects;
 //        @NamedQuery(name="Find_by_email",
 //                query = "select a from User a where a.email = ?1")
 //})
-//@Entity
-//@Table(name = "users")
+@Entity
+@Table(name = "webuser")
 public class User {
 
     @Id
@@ -50,8 +50,8 @@ public class User {
         return usernameSplit[0];
     }
 
-    public boolean verifyPassword(String enterdPassword){
-        if(Objects.equals(this.name, enterdPassword)){
+    public boolean verifyPassword(String enteredPassword){
+        if(Objects.equals(this.name, enteredPassword)){
             System.out.println(this.name + " goed");
             return true;
         }
