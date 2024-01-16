@@ -33,7 +33,7 @@
           <router-link to="/login">Log In</router-link>
         </li>
         <li class="nav-item" v-if="isAuthenticated">
-          <button @click="logout" >Log Out</button>
+          <router-link @click="logout" to="/sign-out">Log Out</router-link>
         </li>
       </div>
     </ul>
