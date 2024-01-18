@@ -3,6 +3,9 @@ package app.repositories;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.TypedQuery;
+import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.persistence.criteria.CriteriaQuery;
+import jakarta.persistence.criteria.Root;
 import jakarta.transaction.Transactional;
 
 import java.util.List;
@@ -21,11 +24,15 @@ public abstract class AbstractEntityRepositoryJpa<E extends Identifiable> implem
 
     @Override
     public List<E> findAll() {
-        TypedQuery<E> query = this.entityManager.createQuery(
-                "select e from " + this.theEntityClass.getSimpleName() + " e",
-                this.theEntityClass);
-        return query.getResultList();
+        CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+        CriteriaQuery<E> cq = cb.createQuery(theEntityClass);
+        Root<E> rootEntry = cq.from(theEntityClass);
+        CriteriaQuery<E> all = cq.select(rootEntry);
+
+        TypedQuery<E> allQuery = entityManager.createQuery(all);
+        return allQuery.getResultList();
     }
+
 
     @Override
     public E findById(long id) {
