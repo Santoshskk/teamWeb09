@@ -3,6 +3,7 @@ package app;
 import app.models.Bid;
 import app.models.Offer;
 import app.repositories.BidsRepositoryJpa;
+import app.repositories.EntityRepository;
 import app.repositories.OffersRepositoryJpa;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
