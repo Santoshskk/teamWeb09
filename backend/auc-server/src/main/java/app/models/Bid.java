@@ -11,10 +11,11 @@ import org.springframework.stereotype.Component;
 public class Bid implements Identifiable {
     @Id
     @GeneratedValue
-    private long bidId;
+    private long id;
     private double offerBid;
 
-    @ManyToOne(cascade = CascadeType.PERSIST)
+    @ManyToOne(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
+    @JoinColumn(name = "offer_id")
     @JsonBackReference
     private Offer offer;
 
@@ -48,11 +49,11 @@ public class Bid implements Identifiable {
     }
 
     public long getOfferId() {
-        return bidId;
+        return id;
     }
 
-    public void setBidId(long id) {
-        this.bidId = id;
+    public void setId(long id) {
+        this.id = id;
     }
 
     public double getOfferBid() {
@@ -64,12 +65,12 @@ public class Bid implements Identifiable {
     }
 
     @Override
-    public long getId() {
+    public long getIdentifiableId() {
         return 0;
     }
 
     @Override
-    public void setId(long id) {
+    public void setIdentifiableId(long id) {
 
     }
 }

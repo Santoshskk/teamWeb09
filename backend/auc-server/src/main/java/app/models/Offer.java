@@ -11,19 +11,20 @@ import org.springframework.stereotype.Component;
 import java.time.LocalDate;
 import java.util.*;
 
-@Component
-@Entity
+
 
 @NamedQueries({
         @NamedQuery(name = "Offer_find_by_status", query = "SELECT o FROM Offer o WHERE o.status = ?1"),
         @NamedQuery(name = "Offer_find_by_title", query = "SELECT o FROM Offer o WHERE o.title LIKE ?1"),
         @NamedQuery(name = "Offer_find_by_status_and_minBidValue", query = "SELECT o FROM Offer o JOIN o.bids b WHERE o.status = ?1 AND b.offerBid >= ?2")
 })
+@Component
+@Entity
 public class Offer implements Identifiable {
     @JsonView(OffersRepository.class)
     @Id
     @GeneratedValue
-    private int offerId;
+    private int id;
     @JsonView(OffersRepository.class)
     private String title;
     @JsonView(OffersRepository.class)
@@ -35,13 +36,13 @@ public class Offer implements Identifiable {
     private LocalDate sellDate;
     @JsonProperty
     private double valueHighestBid;
-    @OneToMany(mappedBy = "offer", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "offer", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference
     @JsonProperty
     private List<Bid> bids = new ArrayList<>();
 
-    public Offer(int offerId, String title, Status status, String description, LocalDate sellDate, double valueHighestBid) {
-        this.offerId = offerId;
+    public Offer(int id, String title, Status status, String description, LocalDate sellDate, double valueHighestBid) {
+        this.id = id;
         this.title = title;
         this.status = status;
         this.description = description;
@@ -49,8 +50,8 @@ public class Offer implements Identifiable {
         this.valueHighestBid = valueHighestBid;
     }
 
-    public Offer(int offerId, String title, Status status, String description, LocalDate sellDate, double valueHighestBid, List<Bid> bid) {
-        this.offerId = offerId;
+    public Offer(int id, String title, Status status, String description, LocalDate sellDate, double valueHighestBid, List<Bid> bid) {
+        this.id = id;
         this.title = title;
         this.status = status;
         this.description = description;
@@ -131,22 +132,22 @@ public class Offer implements Identifiable {
 //        return false;
 //    }
 
-    public int getOfferId() {
-        return offerId;
+    public int getId() {
+        return id;
     }
 
     @Override
-    public long getId() {
+    public long getIdentifiableId() {
         return 0;
     }
 
     @Override
-    public void setId(long id) {
+    public void setIdentifiableId(long id) {
 
     }
 
-    public void setOfferId(int id) {
-        this.offerId = id;
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getTitle() {

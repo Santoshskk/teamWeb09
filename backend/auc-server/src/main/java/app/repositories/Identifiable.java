@@ -1,6 +1,6 @@
 package app.repositories;
 
 public interface Identifiable {
-    long getId();
-    void setId(long id);
+    long getIdentifiableId();
+    void setIdentifiableId(long id);
 }

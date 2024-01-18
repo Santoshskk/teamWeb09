@@ -21,7 +21,9 @@ import java.util.Optional;
 @RequestMapping("/offers")
 public class OffersController {
 
+    @Autowired
     private final EntityRepository<Offer> offersRepositoryJpa;
+    @Autowired
     private final EntityRepository<Bid> bidsRepositoryJpa;
 
 
@@ -125,12 +127,12 @@ public class OffersController {
     public ResponseEntity<Offer> createOffer(@RequestBody Offer offer) {
         if (offer != null) {
             //this can be optemised because the outcome is the same in both cases
-            if (offer.getOfferId() == 0) {
+            if (offer.getId() == 0) {
                 offer = offersRepositoryJpa.save(offer);
             }
 
             URI location = ServletUriComponentsBuilder.fromCurrentRequest()
-                    .path("/{id}").buildAndExpand(offer.getOfferId()).toUri();
+                    .path("/{id}").buildAndExpand(offer.getId()).toUri();
 
             return ResponseEntity.created(location).body(offer);
         } else {
@@ -149,11 +151,11 @@ public class OffersController {
      */
     @PutMapping("/{id}")
     public ResponseEntity<Offer> updateOffer(@PathVariable long id, @RequestBody Offer offer) {
-        if (id != offer.getOfferId()) {
+        if (id != offer.getId()) {
             throw new PreConditionFailedException("ID in the path does not match ID in the request body");
         }
         if (offersRepositoryJpa.findById(id) != null) {
-            offer.setOfferId((int) id);
+            offer.setId((int) id);
             offer = offersRepositoryJpa.save(offer);
             return ResponseEntity.ok(offer);
         } else {

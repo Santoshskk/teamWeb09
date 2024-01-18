@@ -8,7 +8,7 @@ import jakarta.transaction.Transactional;
 import java.util.List;
 
 @Transactional
-public abstract class AbstractEntityRepositoryJpa<E> implements EntityRepository<E> {
+public abstract class AbstractEntityRepositoryJpa<E extends Identifiable> implements EntityRepository<E> {
 
     @PersistenceContext
     protected EntityManager entityManager;
@@ -34,15 +34,23 @@ public abstract class AbstractEntityRepositoryJpa<E> implements EntityRepository
     }
 
     @Override
+    @Transactional
     public E save(E entity) {
-        // Use the entity manager to persist or update the entity
-        entityManager.persist(entity);
+        if (entity.getIdentifiableId() == 0) {
+            entityManager.persist(entity);
+        } else {
+            if (!entityManager.contains(entity)) {
+                entity = entityManager.merge(entity);
+            }
+        }
         return entity;
     }
 
+
     @Override
+    @Transactional
     public E deleteById(long id) {
-        // Use the entity manager to delete the entity
+        //delete the entity
         E entity = findById(id);
         if (entity != null) {
             entityManager.remove(entity);
@@ -52,7 +60,7 @@ public abstract class AbstractEntityRepositoryJpa<E> implements EntityRepository
 
     @Override
     public List<E> findByQuery(String jpqlName, Object... params) {
-        // Use the entity manager to build the named query
+        // build the named query
         TypedQuery<E> query = entityManager.createNamedQuery(jpqlName, theEntityClass);
 
         // Resolve all parameter values into the query
@@ -61,7 +69,6 @@ public abstract class AbstractEntityRepositoryJpa<E> implements EntityRepository
             query.setParameter(i++, param);
         }
 
-        // Return the query result
         return query.getResultList();
     }
 }

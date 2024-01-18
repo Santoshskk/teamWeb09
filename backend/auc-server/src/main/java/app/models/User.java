@@ -1,8 +1,8 @@
 package app.models;
 
+import app.repositories.Identifiable;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
-import org.springframework.stereotype.Component;
 
 import java.util.Objects;
 //@NamedQueries({
@@ -11,10 +11,10 @@ import java.util.Objects;
 //})
 @Entity
 @Table(name = "webuser")
-public class User {
+public class User implements Identifiable {
 
     @Id
-    private long id;
+    private long userId;
 
     @JsonProperty
     private String name;
@@ -26,7 +26,7 @@ public class User {
     private String role;
 
     public User( String email, String hashedPassword, String role) {
-        this.id = randomId();
+        this.userId = randomId();
         this.name= extractName(email);
         this.email = email;
         this.hashedPassword = hashedPassword;
@@ -58,12 +58,12 @@ public class User {
         return false;
     }
 
-    public long getId() {
-        return id;
+    public long getUserId() {
+        return userId;
     }
 
-    public void setId(long id) {
-        this.id = id;
+    public void setUserId(long id) {
+        this.userId = id;
     }
 
     public String getName() {
@@ -96,5 +96,15 @@ public class User {
 
     public void setRole(String role) {
         this.role = role;
+    }
+
+    @Override
+    public long getIdentifiableId() {
+        return 0;
+    }
+
+    @Override
+    public void setIdentifiableId(long id) {
+
     }
 }

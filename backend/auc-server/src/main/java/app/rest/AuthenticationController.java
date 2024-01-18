@@ -15,8 +15,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.NotAcceptableStatusException;
 
-import java.util.List;
-
 @RestController
 @RequestMapping("/authentication")
 public class AuthenticationController {
@@ -50,7 +48,7 @@ public class AuthenticationController {
 
         if (usernameSplit[0].equals(password)) {
             // Issue a token for the user, valid for some time
-            JWToken jwToken = new JWToken(user.getName(), user.getId(), user.getRole());
+            JWToken jwToken = new JWToken(user.getName(), user.getUserId(), user.getRole());
             String tokenString = jwToken.encode(this.apiConfig.getIssuer(),
                     this.apiConfig.getPassphrase(),
                     this.apiConfig.getExpiration());
