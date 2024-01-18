@@ -1,7 +1,6 @@
 package app.repositories;
 
 import app.models.Offer;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
@@ -17,7 +16,7 @@ public class OffersRepositoryMock implements OffersRepository {
         //loop to create 7 samples
         for (int i = 1; i <= 7; i++) {
             Offer sampleOffer = Offer.createSampleOffer(i);
-            sampleOffer.setId(i); // Stel een unieke ID in voor elke aanbieding
+            sampleOffer.setOfferId(i); // Stel een unieke ID in voor elke aanbieding
             offers.add(sampleOffer);
         }
     }
@@ -34,7 +33,7 @@ public class OffersRepositoryMock implements OffersRepository {
     @Override
     public Offer findById(long id) {
         for (Offer offer : offers) {
-            if (offer.getId() == id) {
+            if (offer.getOfferId() == id) {
                 return offer;
             }
         }
@@ -51,13 +50,13 @@ public class OffersRepositoryMock implements OffersRepository {
      */
     @Override
     public Offer save(Offer offer) {
-        if (offer.getId() == 0) {
+        if (offer.getOfferId() == 0) {
             int nextId = generateUniqueID();
-            offer.setId(nextId);
+            offer.setOfferId(nextId);
             offers.add(offer);
         } else {
             for (int i = 0; i < offers.size(); i++) {
-                if (offers.get(i).getId() == offer.getId()) {
+                if (offers.get(i).getOfferId() == offer.getOfferId()) {
                     offers.set(i, offer);
                     return offer;
                 }
@@ -71,8 +70,8 @@ public class OffersRepositoryMock implements OffersRepository {
     private int generateUniqueID() {
         int nextId = 1;
         for (Offer existingOffer : offers) {
-            if (existingOffer.getId() >= nextId) {
-                nextId = existingOffer.getId() + 1;
+            if (existingOffer.getOfferId() >= nextId) {
+                nextId = existingOffer.getOfferId() + 1;
             }
         }
         return nextId;
@@ -86,7 +85,7 @@ public class OffersRepositoryMock implements OffersRepository {
     @Override
     public Offer deleteById(long id) {
         for (Offer offer : offers) {
-            if (offer.getId() == id) {
+            if (offer.getOfferId() == id) {
                 offers.remove(offer);
                 return offer;
             }

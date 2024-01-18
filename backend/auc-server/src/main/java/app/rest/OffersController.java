@@ -3,6 +3,7 @@ package app.rest;
 import app.models.Bid;
 import app.models.Offer;
 import app.repositories.BidsRepositoryJpa;
+import app.repositories.EntityRepository;
 import app.repositories.OffersRepository;
 import app.repositories.OffersRepositoryJpa;
 import com.fasterxml.jackson.annotation.JsonView;
@@ -20,8 +21,8 @@ import java.util.Optional;
 @RequestMapping("/offers")
 public class OffersController {
 
-    private final OffersRepositoryJpa offersRepositoryJpa;
-    private final BidsRepositoryJpa bidsRepositoryJpa;
+    private final EntityRepository<Offer> offersRepositoryJpa;
+    private final EntityRepository<Bid> bidsRepositoryJpa;
 
 
     @Autowired
@@ -124,12 +125,12 @@ public class OffersController {
     public ResponseEntity<Offer> createOffer(@RequestBody Offer offer) {
         if (offer != null) {
             //this can be optemised because the outcome is the same in both cases
-            if (offer.getId() == 0) {
+            if (offer.getOfferId() == 0) {
                 offer = offersRepositoryJpa.save(offer);
             }
 
             URI location = ServletUriComponentsBuilder.fromCurrentRequest()
-                    .path("/{id}").buildAndExpand(offer.getId()).toUri();
+                    .path("/{id}").buildAndExpand(offer.getOfferId()).toUri();
 
             return ResponseEntity.created(location).body(offer);
         } else {
@@ -148,11 +149,11 @@ public class OffersController {
      */
     @PutMapping("/{id}")
     public ResponseEntity<Offer> updateOffer(@PathVariable long id, @RequestBody Offer offer) {
-        if (id != offer.getId()) {
+        if (id != offer.getOfferId()) {
             throw new PreConditionFailedException("ID in the path does not match ID in the request body");
         }
         if (offersRepositoryJpa.findById(id) != null) {
-            offer.setId((int) id);
+            offer.setOfferId((int) id);
             offer = offersRepositoryJpa.save(offer);
             return ResponseEntity.ok(offer);
         } else {

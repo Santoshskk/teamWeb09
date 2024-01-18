@@ -1,17 +1,17 @@
 package app.models;
 
+import app.repositories.Identifiable;
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import org.springframework.stereotype.Component;
 
 @Component
 
 @Entity
-public class Bid {
+public class Bid implements Identifiable {
     @Id
     @GeneratedValue
-    private long id;
+    private long bidId;
     private double offerBid;
 
     @ManyToOne(cascade = CascadeType.PERSIST)
@@ -47,12 +47,12 @@ public class Bid {
         this.offer = offer;
     }
 
-    public long getId() {
-        return id;
+    public long getOfferId() {
+        return bidId;
     }
 
-    public void setId(long id) {
-        this.id = id;
+    public void setBidId(long id) {
+        this.bidId = id;
     }
 
     public double getOfferBid() {
@@ -61,5 +61,15 @@ public class Bid {
 
     public void setOfferBid(double offerBid) {
         this.offerBid = offerBid;
+    }
+
+    @Override
+    public long getId() {
+        return 0;
+    }
+
+    @Override
+    public void setId(long id) {
+
     }
 }

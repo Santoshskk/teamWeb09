@@ -1,7 +1,7 @@
 package app.models;
 
+import app.repositories.Identifiable;
 import app.repositories.OffersRepository;
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonView;
@@ -19,11 +19,11 @@ import java.util.*;
         @NamedQuery(name = "Offer_find_by_title", query = "SELECT o FROM Offer o WHERE o.title LIKE ?1"),
         @NamedQuery(name = "Offer_find_by_status_and_minBidValue", query = "SELECT o FROM Offer o JOIN o.bids b WHERE o.status = ?1 AND b.offerBid >= ?2")
 })
-public class Offer {
+public class Offer implements Identifiable {
     @JsonView(OffersRepository.class)
     @Id
     @GeneratedValue
-    private int id;
+    private int offerId;
     @JsonView(OffersRepository.class)
     private String title;
     @JsonView(OffersRepository.class)
@@ -40,8 +40,8 @@ public class Offer {
     @JsonProperty
     private List<Bid> bids = new ArrayList<>();
 
-    public Offer(int id, String title, Status status, String description, LocalDate sellDate, double valueHighestBid) {
-        this.id = id;
+    public Offer(int offerId, String title, Status status, String description, LocalDate sellDate, double valueHighestBid) {
+        this.offerId = offerId;
         this.title = title;
         this.status = status;
         this.description = description;
@@ -49,8 +49,8 @@ public class Offer {
         this.valueHighestBid = valueHighestBid;
     }
 
-    public Offer(int id, String title, Status status, String description, LocalDate sellDate, double valueHighestBid, List<Bid> bid) {
-        this.id = id;
+    public Offer(int offerId, String title, Status status, String description, LocalDate sellDate, double valueHighestBid, List<Bid> bid) {
+        this.offerId = offerId;
         this.title = title;
         this.status = status;
         this.description = description;
@@ -131,12 +131,22 @@ public class Offer {
 //        return false;
 //    }
 
-    public int getId() {
-        return id;
+    public int getOfferId() {
+        return offerId;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    @Override
+    public long getId() {
+        return 0;
+    }
+
+    @Override
+    public void setId(long id) {
+
+    }
+
+    public void setOfferId(int id) {
+        this.offerId = id;
     }
 
     public String getTitle() {
