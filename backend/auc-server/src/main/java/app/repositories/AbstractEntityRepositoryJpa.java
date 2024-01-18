@@ -40,15 +40,30 @@ public abstract class AbstractEntityRepositoryJpa<E extends Identifiable> implem
         return entityManager.find(theEntityClass, id);
     }
 
+//    @Override
+//    @Transactional
+//    public E save(E entity) {
+//        if (!entityManager.contains(entity) && entity.getIdentifiableId() == 0) {
+//            entityManager.persist(entity);
+//        } else {
+//                entity = entityManager.merge(entity);
+//        }
+//        return entity;
+//    }
+
     @Override
     @Transactional
     public E save(E entity) {
-        if (entity.getIdentifiableId() == 0) {
-            entityManager.persist(entity);
-        } else {
-            if (!entityManager.contains(entity)) {
-                entity = entityManager.merge(entity);
+        try {
+            if (entity.getIdentifiableId() == 0) {
+                entityManager.persist(entity);
+                return entity;
+            } else {
+                return entityManager.merge(entity);
             }
+        } catch (Exception e) {
+            System.out.println(e);
+            e.printStackTrace();
         }
         return entity;
     }
